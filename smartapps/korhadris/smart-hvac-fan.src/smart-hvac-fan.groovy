@@ -25,34 +25,34 @@ definition(
 
 
 preferences {
-	section("Temperature diffference to turn on fan") {
-    	input "max_delta", "number", required: true, title: "Max temp difference"
+    section("Temperature diffference to turn on fan") {
+        input "max_delta", "number", required: true, title: "Max temp difference"
         input "hysteresis", "number", required: true, title: "Hysteresis"
-	}
+    }
     section("Thermostat") {
         input "thermostat", "capability.thermostat", required: true, title: "Thermostat (main temperature and fan control)"
     }
     section("Temperature sensors to use") {
     	// input "temp1", "capability.temperatureMeasurement", required: true, title: "Additional Sensor"
-    	input "temps", "capability.temperatureMeasurement", required: false, title: "Additional Sensors", multiple: true
+        input "temps", "capability.temperatureMeasurement", required: false, title: "Additional Sensors", multiple: true
     }
 }
 
 def installed() {
-	log.debug "Installed with settings: ${settings}"
-	initialize()
+    log.debug "Installed with settings: ${settings}"
+    initialize()
 }
 
 def updated() {
-	log.debug "Updated with settings: ${settings}"
-	unsubscribe()
-	initialize()
+    log.debug "Updated with settings: ${settings}"
+    unsubscribe()
+    initialize()
 }
 
 def initialize() {
-  	subscribe(thermostat, "temperature", temperatureChangeHandler)
+    subscribe(thermostat, "temperature", temperatureChangeHandler)
     temps.each() {
-      subscribe(it, "temperature", temperatureChangeHandler)
+        subscribe(it, "temperature", temperatureChangeHandler)
     }
     checkTemperatures()
 }
